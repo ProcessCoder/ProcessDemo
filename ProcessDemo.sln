@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessDemo.WPF", "ProcessDemo.WPF\ProcessDemo.WPF.csproj", "{898BFDE1-3F40-49D5-8659-B33145276D81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessDemo.Commons", "ProcessDemo.Commons\ProcessDemo.Commons.csproj", "{28E3C4FC-0075-419D-B1E1-46AA4105D1F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{898BFDE1-3F40-49D5-8659-B33145276D81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{898BFDE1-3F40-49D5-8659-B33145276D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{898BFDE1-3F40-49D5-8659-B33145276D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{898BFDE1-3F40-49D5-8659-B33145276D81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28E3C4FC-0075-419D-B1E1-46AA4105D1F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28E3C4FC-0075-419D-B1E1-46AA4105D1F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28E3C4FC-0075-419D-B1E1-46AA4105D1F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28E3C4FC-0075-419D-B1E1-46AA4105D1F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8EC3B9B-895B-4A92-AF7F-53926071E019}
+	EndGlobalSection
+EndGlobal
