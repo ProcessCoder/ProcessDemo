@@ -1,70 +1,67 @@
 ﻿<Window x:Class="ProcessDemo.WPF.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProcessDemo.WPF"
-        mc:Ignorable="d"
-        Title="ProcessDemo" 
-        WindowState="Maximized"
-        ResizeMode="CanResize"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
-        >
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="4*" />
-        </Grid.RowDefinitions>
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ProcessDemo.WPF"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Title="ProcessDemo"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    ResizeMode="CanResize"
+    TextElement.FontSize="18"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowState="Maximized">
+    <StackPanel
+        Orientation="Vertical">
 
-        <StackPanel 
-            Orientation="Horizontal" 
-            VerticalAlignment="Center" 
-            HorizontalAlignment="Center" 
-            Grid.Row="0">
+        <StackPanel
+            Orientation="Horizontal">
 
-            <Button 
-                x:Name="btnGenerateTrees" 
-                Content="Give me 10 new trees!"
-                Style="{DynamicResource MaterialDesignFlatLightBgButton}"
+            <Button x:Name="btnGenerateTrees"
                 Click="btnGenerateTrees_Click"
-                Width="250"             
-                Margin="20"
-            />
+                Content="Give me 10 new trees!" />
 
-            <Button 
-                x:Name="btnSortByYieldAscending" 
-                Content="Sort by ascending apple yield"
-                Style="{DynamicResource MaterialDesignFlatLightBgButton}"
+            <Button x:Name="btnSortByYieldAscending"
                 Click="btnSortByYieldAscending_Click"
-                Width="250"             
-                Margin="20"
-            />
-
-
+                Content="Sort by ascending apple yield" />
         </StackPanel>
 
-        <DataGrid 
-            x:Name="dgData" 
-            CanUserAddRows="False"
-            HorizontalAlignment="Center" 
-            ItemsSource="{Binding AppleTrees}"
+        <ComboBox
+            Style="{DynamicResource SpecialComboBox}"
+            ItemsSource="{Binding AppleTrees}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Tree No. " />
+                        <TextBlock Text="{Binding TreeNumber}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <DataGrid x:Name="dgData"
+            HorizontalAlignment="Center"
             AutoGenerateColumns="False"
-            Grid.Row="1">
+            CanUserAddRows="False"
+            ItemsSource="{Binding AppleTrees}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Tree Number" Binding="{Binding TreeNumber}" />
-                <DataGridTextColumn Header="Apple Yield in kg per year" Binding="{Binding AppleYield}" />
-                <DataGridTextColumn Header="Water consumption in l per year" Binding="{Binding WaterConsumption}" />
-                <DataGridTextColumn Header="Fertilizer" Binding="{Binding FertilizingAgent}" />
+                <DataGridTextColumn
+                    Binding="{Binding TreeNumber}"
+                    Header="Tree Number" />
+                <DataGridTextColumn
+                    Binding="{Binding AppleYield}"
+                    Header="Apple Yield in kg per year" />
+                <DataGridTextColumn
+                    Binding="{Binding WaterConsumption}"
+                    Header="Water consumption in l per year" />
+                <DataGridTextColumn
+                    Binding="{Binding FertilizingAgent}"
+                    Header="Fertilizer" />
             </DataGrid.Columns>
         </DataGrid>
 
-    </Grid>
-    
+    </StackPanel>
+
 </Window>
