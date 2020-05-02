@@ -31,9 +31,6 @@ namespace ProcessDemo.Commons.Migrations
                     b.Property<int>("FertilizingAgent")
                         .HasColumnType("int");
 
-                    b.Property<int>("TreeNumber")
-                        .HasColumnType("int");
-
                     b.Property<double>("WaterConsumption")
                         .HasColumnType("float");
 

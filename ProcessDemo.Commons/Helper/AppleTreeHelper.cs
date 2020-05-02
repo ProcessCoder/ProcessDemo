@@ -1,36 +1,97 @@
-﻿using System;
+﻿using ProcessDemo.Commons.Database;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using static ProcessDemo.Commons.Enums.Enums;
 
 namespace ProcessDemo.Commons.Helper
 {
     public static class AppleTreeHelper
     {
-        public static List<AppleTree> InitialiseTrees()
+        /// <summary>
+        /// Returns a single AppleTree by Id
+        /// </summary>
+        /// <returns></returns>
+        public static AppleTree GetAppleTreeById(int id)
         {
-            //Initalise return value
-            List<AppleTree> result = new List<AppleTree>();
-
-            //Random number generator
-            Random random = new Random();
-
-            //Loop to create 10 trees
-            for(int i =1; i<=10;i++)
+            using (var db = new AppleTreeDbContext())
             {
-                //Add tree with random properties
-                result.Add(new AppleTree()
-                            {
-                                TreeNumber= i,
-                                AppleYield=random.Next(50, 150),
-                                WaterConsumption= random.Next(800,1200),
-                                FertilizingAgent= (Fertilizer)random.Next(Enum.GetNames(typeof(Fertilizer)).Length)
-                            }
-                        );
+                return db.AppleTrees.Where(f => f.Id == id).SingleOrDefault();
             }
 
-            //return the List
-            return result;
+        }
+
+        /// <summary>
+        /// Returns all AppleTrees as a List
+        /// </summary>
+        /// <returns></returns>
+        public static IList<AppleTree> GetAppleTreeAll()
+        {
+            using (var db = new AppleTreeDbContext())
+            {
+                var query = db.AppleTrees;
+               
+                return query.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Creates a new Apple Tree from its properties
+        /// </summary>
+        /// <returns></returns>
+        public static AppleTree CreateAppleTree(double appleYield, double waterConsumption, Fertilizer fertilizingAgent)
+        {
+            using (var db = new AppleTreeDbContext())
+            {
+                var f = new AppleTree();
+                f.AppleYield = appleYield;
+                f.WaterConsumption = waterConsumption;
+                f.FertilizingAgent = fertilizingAgent;
+
+                //Add to Database
+                db.AppleTrees.Add(f);
+
+                //Save
+                db.SaveChanges();
+
+                return f;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new Apple Tree from an object
+        /// </summary>
+        /// <returns></returns>
+        public static AppleTree CreateAppleTree(AppleTree f)
+        {
+
+            using (var db = new AppleTreeDbContext())
+            {
+                //Save
+               
+                    db.AppleTrees.Add(f);
+                    db.SaveChanges();
+               
+                return f;
+            }
+        }
+
+        /// <summary>
+        /// Deletes all Apple Trees from the database
+        /// </summary>
+        /// <returns></returns>
+        public static IList<AppleTree> DeleteAppleTreeAll()
+        {
+            using (var db = new AppleTreeDbContext())
+            {
+                var query = (from p in db.AppleTrees
+                             select p);
+                db.AppleTrees.RemoveRange(query);
+
+                db.SaveChanges();
+
+                return (from p in db.AppleTrees
+                        select p).ToList();
+            }
         }
     }
 }

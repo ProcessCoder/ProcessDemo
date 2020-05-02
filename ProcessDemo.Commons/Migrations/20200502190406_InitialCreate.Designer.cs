@@ -9,7 +9,7 @@ using ProcessDemo.Commons.Database;
 namespace ProcessDemo.Commons.Migrations
 {
     [DbContext(typeof(AppleTreeDbContext))]
-    [Migration("20200502095109_InitialCreate")]
+    [Migration("20200502190406_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,6 @@ namespace ProcessDemo.Commons.Migrations
                         .HasColumnType("float");
 
                     b.Property<int>("FertilizingAgent")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TreeNumber")
                         .HasColumnType("int");
 
                     b.Property<double>("WaterConsumption")

@@ -1,24 +1,11 @@
-﻿using MaterialDesignThemes.Wpf;
-using ProcessDemo.Commons;
+﻿using ProcessDemo.Commons;
+using ProcessDemo.Commons.Database;
 using ProcessDemo.Commons.Helper;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ProcessDemo.WPF
 {
@@ -43,34 +30,13 @@ namespace ProcessDemo.WPF
             set => RaisePropertyChange(ref appleTrees,value); 
         }
 
-    //    public List<string> Swatches = new List<string>()
-    //        {
-    //           "Amber",
-    //"Blue",
-    //"BlueGrey",
-    //"Brown",
-    //"Cyan",
-    //"DeepOrange",
-    //"DeepPurple",
-    //"Green",
-    //"Grey",
-    //"Indigo",
-    //"LightBlue",
-    //"LightGreen",
-    //"Lime",
-    //"Orange",
-    //"Pink",
-    //"Purple",
-    //"Red",
-    //"Teal",
-    //"Yellow"
-    //        };
         public MainWindow()
         {
             
             InitializeComponent();
-            
-            AppleTrees = AppleTreeHelper.InitialiseTrees();
+
+            //We query all Apple Trees from the database on StartUp
+            AppleTrees = AppleTreeHelper.GetAppleTreeAll().ToList();
 
             //The MainWindow's DataContext is the current MainWindow instance itself
             DataContext = this;
@@ -78,15 +44,9 @@ namespace ProcessDemo.WPF
 
         private void btnGenerateTrees_Click(object sender, RoutedEventArgs e)
         {
-            //Generate 10 new trees
-            AppleTrees = AppleTreeHelper.InitialiseTrees();
-
-
-            //var b = Application.Current.Resources.MergedDictionaries.Where(x => x.Source.ToString().Contains("Recommended/Primary/MaterialDesignColor")).FirstOrDefault();
-            //Uri uri = new Uri($"pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.{Swatches[(new Random()).Next(Swatches.Count)]}.xaml");
-           
-            //Application.Current.Resources.MergedDictionaries.Where(x => x.Source.ToString().Contains("Recommended/Primary/MaterialDesignColor")).FirstOrDefault().Source = uri;
-            
+            //Append 10 new trees to our List
+            AppleTreeDbInitializer.InitialiseTrees();
+            AppleTrees = AppleTreeHelper.GetAppleTreeAll().ToList();
         }
 
         private void btnSortByYieldAscending_Click(object sender, RoutedEventArgs e)
@@ -95,6 +55,10 @@ namespace ProcessDemo.WPF
             AppleTrees = AppleTrees.OrderBy(x=>x.AppleYield).ToList();
         }
 
-        
+        private void btnDeleteAllTrees_Click(object sender, RoutedEventArgs e)
+        {
+            AppleTreeHelper.DeleteAppleTreeAll();
+            AppleTrees = AppleTreeHelper.GetAppleTreeAll().ToList();
+        }
     }
 }

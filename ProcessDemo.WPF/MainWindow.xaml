@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ProcessDemo.WPF"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     Title="ProcessDemo"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -13,42 +14,52 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     WindowState="Maximized">
-    <StackPanel
-        Orientation="Vertical">
-
+    <DockPanel>
         <StackPanel
-            Orientation="Horizontal">
+            Margin="0,20"
+            DockPanel.Dock="Top"
+            Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
 
-            <Button x:Name="btnGenerateTrees"
-                Click="btnGenerateTrees_Click"
-                Content="Give me 10 new trees!" />
+                <Button x:Name="btnGenerateTrees"
+                    Click="btnGenerateTrees_Click"
+                    Content="Give me 10 new trees!" />
 
-            <Button x:Name="btnSortByYieldAscending"
-                Click="btnSortByYieldAscending_Click"
-                Content="Sort by ascending apple yield" />
+                <Button x:Name="btnSortByYieldAscending"
+                    Click="btnSortByYieldAscending_Click"
+                    Content="Sort by ascending apple yield" />
+
+                <Button x:Name="btnDeleteAllTrees"
+                    Click="btnDeleteAllTrees_Click"
+                    Content="Delete all trees" />
+            </StackPanel>
+
+            <ComboBox
+                md:HintAssist.Hint="Select an apple tree"
+                md:HintAssist.IsFloating="False"
+                ItemsSource="{Binding AppleTrees}"
+                Style="{DynamicResource MaterialDesignFloatingHintComboBox}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Tree No. " />
+                            <TextBlock Text="{Binding Id}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
 
-        <ComboBox
-            Style="{DynamicResource SpecialComboBox}"
-            ItemsSource="{Binding AppleTrees}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Tree No. " />
-                        <TextBlock Text="{Binding TreeNumber}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-
         <DataGrid x:Name="dgData"
+            Margin="0,20"
             HorizontalAlignment="Center"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
+            DockPanel.Dock="Bottom"
             ItemsSource="{Binding AppleTrees}">
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Binding="{Binding TreeNumber}"
+                    Binding="{Binding Id}"
                     Header="Tree Number" />
                 <DataGridTextColumn
                     Binding="{Binding AppleYield}"
@@ -62,6 +73,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-    </StackPanel>
+    </DockPanel>
 
 </Window>
