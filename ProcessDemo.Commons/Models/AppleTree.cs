@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using static ProcessDemo.Commons.Enums.Enums;
 
@@ -7,6 +8,8 @@ namespace ProcessDemo.Commons
 {
     public class AppleTree
     {
+        [Key]
+        public int Id { get; set; }
         public int TreeNumber { get; set; }
         public double AppleYield { get; set; }
         public double WaterConsumption { get; set; }
@@ -14,13 +17,6 @@ namespace ProcessDemo.Commons
         public AppleTree()
         {
 
-        }
-        public AppleTree(int treenumber, double appleyield, double waterconsumption, Fertilizer fertilizingagent)
-        {
-            this.TreeNumber = treenumber;
-            this.AppleYield = appleyield;
-            this.WaterConsumption = waterconsumption;
-            this.FertilizingAgent = fertilizingagent;
         }
     }
 }
