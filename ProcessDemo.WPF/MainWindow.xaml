@@ -15,6 +15,13 @@
     TextOptions.TextRenderingMode="Auto"
     WindowState="Maximized">
     <DockPanel>
+        <Menu
+            DockPanel.Dock="Top"
+            Style="{DynamicResource MaterialDesignMenu}">
+            <MenuItem
+                Click="btnChangeTheme_Click"
+                Header="Change Theme" />
+        </Menu>
         <StackPanel
             Margin="0,20"
             DockPanel.Dock="Top"
