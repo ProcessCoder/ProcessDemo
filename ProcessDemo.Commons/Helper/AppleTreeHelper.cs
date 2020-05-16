@@ -1,7 +1,8 @@
 ﻿using ProcessDemo.Commons.Database;
+using ProcessDemo.Commons.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using static ProcessDemo.Commons.Enums.Enums;
 
 namespace ProcessDemo.Commons.Helper
 {
@@ -91,6 +92,37 @@ namespace ProcessDemo.Commons.Helper
 
                 return (from p in db.AppleTrees
                         select p).ToList();
+            }
+        }
+
+
+        /// <summary>
+        /// Deletes a tree by Id
+        /// </summary>
+        /// <returns></returns>
+        public static void DeleteAppleTreeById(int id)
+        {
+            using (var db = new AppleTreeDbContext())
+            {
+                var apples = db.AppleTrees.Where(c => c.Id == id);
+                db.AppleTrees.RemoveRange(apples);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Updates a tree
+        /// </summary>
+        /// <returns></returns>
+        public static void UpdateTree(AppleTree appletree)
+        {
+            using (var db = new AppleTreeDbContext())
+            {
+                var tree = db.AppleTrees.FirstOrDefault(c => c.Id == appletree.Id);
+                tree.AppleYield = appletree.AppleYield;
+                tree.FertilizingAgent = appletree.FertilizingAgent;
+                tree.WaterConsumption = appletree.WaterConsumption;
+                db.SaveChanges();
             }
         }
     }

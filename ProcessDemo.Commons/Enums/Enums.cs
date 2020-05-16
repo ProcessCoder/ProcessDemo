@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProcessDemo.Commons.Enums
+﻿namespace ProcessDemo.Commons.Enums
 {
-    public class Enums
+    public enum Fertilizer 
     {
-        public enum Fertilizer 
-        {
-            Strong,
-            Medium,
-            Light
-        }
+        Strong,
+        Medium,
+        Light
     }
 }

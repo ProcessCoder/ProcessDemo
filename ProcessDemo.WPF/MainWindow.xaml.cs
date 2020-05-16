@@ -1,18 +1,12 @@
 ﻿using MaterialDesignThemes.Wpf;
 using ProcessDemo.Commons;
-using ProcessDemo.Commons.Database;
 using ProcessDemo.Commons.Helper;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace ProcessDemo.WPF
@@ -38,7 +32,7 @@ namespace ProcessDemo.WPF
             get => appleTrees; 
             set => RaisePropertyChange(ref appleTrees,value); 
         }
-        
+
 
         public MainWindow()
         {
@@ -47,30 +41,12 @@ namespace ProcessDemo.WPF
 
             //We query all Apple Trees from the database on StartUp
             AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
-            
+
             //The MainWindow's DataContext is the current MainWindow instance itself
             DataContext = this;
         }
 
-        private async void btnGenerateTrees_Click(object sender, RoutedEventArgs e)
-        {
-            //We apply an OverrideCursor to singal to the user that there's work in progress
-            Mouse.OverrideCursor = Cursors.Wait;
-            try
-            {
-                //We fetch 10 new trees one by one and add them to our ObservableCollection which is the Itemssource of our DataGrid
-                await foreach (var tree in GetAppleTreesAsync())
-                {
-                    AppleTrees.Add(tree);
-                }
-            }
-            finally
-            {
-                //After completion, the OverrideCursor can be disposed
-                Mouse.OverrideCursor = null;
-            }
-
-        }
+     
 
         private void btnSortByYieldAscending_Click(object sender, RoutedEventArgs e)
         {
@@ -82,32 +58,6 @@ namespace ProcessDemo.WPF
         {
             AppleTreeHelper.DeleteAppleTreeAll();
             AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
-        }
-
-
-        public async IAsyncEnumerable<AppleTree> GetAppleTreesAsync()
-        {
-            //We initialize 10 new trees
-            var newTrees = AppleTreeDbInitializer.InitialiseTrees();
-
-            //Sum equals 100 % progress
-            double sum = newTrees.Count;
-
-            int i = 0;
-            foreach (var tree in newTrees)
-            {
-                //We wait for 200 ms to simulate a long running operation
-                await Task.Delay(200);
-
-                //We return the respective tree without exiting the method
-                yield return tree;
-
-                //i is augmented with each return
-                i++;
-
-                //We output the progress to the Output Window
-                Trace.WriteLine($"Progress: {Math.Round(i / sum * 100,1)} %");
-            }
         }
 
         #region Change theme
@@ -129,5 +79,38 @@ namespace ProcessDemo.WPF
         }
         #endregion
 
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                var appletree = (AppleTree)((Button)sender).DataContext;
+                AppleTreeHelper.DeleteAppleTreeById(appletree.Id);
+                AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
+                MessageBox.Show($"Tree with Id {appletree.Id} deleted");
+            }
+            catch(System.InvalidCastException)
+            {
+                MessageBox.Show("This row is empty and cannot be deleted.");
+            }
+            
+        }
+
+        private void dgData_RowEditEnding(object sender, System.Windows.Controls.DataGridRowEditEndingEventArgs e)
+        {
+            var appletree = (AppleTree)((DataGrid)sender).SelectedValue;
+            if(AppleTreeHelper.GetAppleTreeAll().Where(c=>c.Id==appletree.Id).Any())
+            {
+                AppleTreeHelper.UpdateTree(appletree);
+                MessageBox.Show($"Updated tree with Id {appletree.Id}");
+            }
+            else
+            {
+                AppleTreeHelper.CreateAppleTree(appletree);
+                MessageBox.Show($"New tree created");
+            }
+            AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
+
+        }
     }
 }

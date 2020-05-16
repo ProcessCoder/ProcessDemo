@@ -1,9 +1,11 @@
 ﻿<Window x:Class="ProcessDemo.WPF.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:enum="clr-namespace:ProcessDemo.Commons.Enums;assembly=ProcessDemo.Commons"
     xmlns:local="clr-namespace:ProcessDemo.WPF"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     Title="ProcessDemo"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -14,6 +16,16 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     WindowState="Maximized">
+    <Window.Resources>
+        <!-- This ObjectDataProvider creates our Fertilizer values in xaml and makes them available for binding-->
+        <ObjectDataProvider x:Key="dataFromEnum"
+            MethodName="GetValues"
+            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enum:Fertilizer" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <DockPanel>
         <Menu
             DockPanel.Dock="Top"
@@ -22,61 +34,49 @@
                 Click="btnChangeTheme_Click"
                 Header="Change Theme" />
         </Menu>
-        <StackPanel
-            Margin="0,20"
-            DockPanel.Dock="Top"
-            Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-
-                <Button x:Name="btnGenerateTrees"
-                    Click="btnGenerateTrees_Click"
-                    Content="Give me 10 new trees!" />
-
-                <Button x:Name="btnSortByYieldAscending"
-                    Click="btnSortByYieldAscending_Click"
-                    Content="Sort by ascending apple yield" />
-
-                <Button x:Name="btnDeleteAllTrees"
-                    Click="btnDeleteAllTrees_Click"
-                    Content="Delete all trees" />
-            </StackPanel>
-
-            <ComboBox
-                md:HintAssist.Hint="Select an apple tree"
-                md:HintAssist.IsFloating="False"
-                ItemsSource="{Binding AppleTrees}"
-                Style="{DynamicResource MaterialDesignFloatingHintComboBox}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Tree No. " />
-                            <TextBlock Text="{Binding Id}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </StackPanel>
-
         <DataGrid x:Name="dgData"
             Margin="0,20"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            DockPanel.Dock="Bottom"
-            ItemsSource="{Binding AppleTrees}">
+            CanUserAddRows="True"
+            ItemsSource="{Binding AppleTrees}"
+            RowEditEnding="dgData_RowEditEnding">
+            
             <DataGrid.Columns>
+                
+                <!-- The apple tree (source) shall be updated OnPropertyChanged -->
+                <!-- Binding works from source to target and from target to source -->
                 <DataGridTextColumn
-                    Binding="{Binding Id}"
-                    Header="Tree Number" />
-                <DataGridTextColumn
-                    Binding="{Binding AppleYield}"
+                    Binding="{Binding AppleYield, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Header="Apple Yield in kg per year" />
                 <DataGridTextColumn
-                    Binding="{Binding WaterConsumption}"
+                    Binding="{Binding WaterConsumption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Header="Water consumption in l per year" />
-                <DataGridTextColumn
-                    Binding="{Binding FertilizingAgent}"
-                    Header="Fertilizer" />
+                
+                 <!-- Wee need a template column to display a ComboBox the user can pick from-->
+                <DataGridTemplateColumn Header="Fertilizer">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="cbFertilizers"
+                                ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                                SelectedItem="{Binding FertilizingAgent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <!-- Another TemplateColumn for our Delete Button-->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnDelete"
+                                Click="btnDelete_Click"
+                                DataContext="{Binding}">
+                                <md:PackIcon Kind="Trash" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

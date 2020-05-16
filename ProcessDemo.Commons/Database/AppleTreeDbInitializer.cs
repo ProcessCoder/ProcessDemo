@@ -1,8 +1,8 @@
-﻿using ProcessDemo.Commons.Helper;
+﻿using ProcessDemo.Commons.Enums;
+using ProcessDemo.Commons.Helper;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static ProcessDemo.Commons.Enums.Enums;
 
 namespace ProcessDemo.Commons.Database
 {
