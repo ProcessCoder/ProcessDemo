@@ -10,8 +10,9 @@ namespace ProcessDemo.Commons.Database
     {
         public static List<AppleTree> InitialiseTrees()
         {
-            //Initalise return value
-            List<AppleTree> result = new List<AppleTree>();
+            AppleTreeHelper appleTreeHelper = new AppleTreeHelper(new AppleTreeDbContext());
+        //Initalise return value
+        List<AppleTree> result = new List<AppleTree>();
 
             //Random number generator
             Random random = new Random();
@@ -27,7 +28,7 @@ namespace ProcessDemo.Commons.Database
                     FertilizingAgent = (Fertilizer)random.Next(Enum.GetNames(typeof(Fertilizer)).Length)
                 };
 
-                AppleTreeHelper.CreateAppleTree(tree);
+                appleTreeHelper.CreateAppleTree(tree);
                 result.Add(tree);
             }
 

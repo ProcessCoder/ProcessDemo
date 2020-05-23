@@ -19,8 +19,11 @@ namespace ProcessDemo.Commons.Database
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-
-                optionsBuilder.UseSqlServer(connectionString);
+                if(!optionsBuilder.IsConfigured)
+                {
+                    optionsBuilder.UseSqlServer(connectionString);
+                }
+                
             }
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,9 +32,6 @@ namespace ProcessDemo.Commons.Database
             }
 
             //Our database will have one table called AppleTrees
-            public DbSet<AppleTree> AppleTrees { get; set; }
-
-
-      
+            public virtual DbSet<AppleTree> AppleTrees { get; set; }
     }
 }

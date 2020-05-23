@@ -17,7 +17,7 @@
     TextOptions.TextRenderingMode="Auto"
     WindowState="Maximized">
     <Window.Resources>
-        <!-- This ObjectDataProvider creates our Fertilizer values in xaml and makes them available for binding-->
+        <!--  This ObjectDataProvider creates our Fertilizer values in xaml and makes them available for binding  -->
         <ObjectDataProvider x:Key="dataFromEnum"
             MethodName="GetValues"
             ObjectType="{x:Type sys:Enum}">
@@ -42,19 +42,19 @@
             CanUserAddRows="True"
             ItemsSource="{Binding AppleTrees}"
             RowEditEnding="dgData_RowEditEnding">
-            
+
             <DataGrid.Columns>
-                
-                <!-- The apple tree (source) shall be updated OnPropertyChanged -->
-                <!-- Binding works from source to target and from target to source -->
+
+                <!--  The apple tree (source) shall be updated OnPropertyChanged  -->
+                <!--  Binding works from source to target and from target to source  -->
                 <DataGridTextColumn
                     Binding="{Binding AppleYield, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Header="Apple Yield in kg per year" />
                 <DataGridTextColumn
                     Binding="{Binding WaterConsumption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Header="Water consumption in l per year" />
-                
-                 <!-- Wee need a template column to display a ComboBox the user can pick from-->
+
+                <!--  Wee need a template column to display a ComboBox the user can pick from  -->
                 <DataGridTemplateColumn Header="Fertilizer">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -64,8 +64,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
-                <!-- Another TemplateColumn for our Delete Button-->
+
+                <!--  Another TemplateColumn for our Delete Button  -->
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

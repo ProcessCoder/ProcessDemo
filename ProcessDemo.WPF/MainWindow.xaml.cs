@@ -1,5 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using ProcessDemo.Commons;
+using ProcessDemo.Commons.Database;
 using ProcessDemo.Commons.Helper;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -32,15 +33,15 @@ namespace ProcessDemo.WPF
             get => appleTrees; 
             set => RaisePropertyChange(ref appleTrees,value); 
         }
-
+        public AppleTreeHelper appleTreeHelper = new AppleTreeHelper(new AppleTreeDbContext());
 
         public MainWindow()
         {
             
             InitializeComponent();
-
+            
             //We query all Apple Trees from the database on StartUp
-            AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
+            AppleTrees = new ObservableCollection<AppleTree>(appleTreeHelper.GetAppleTreeAll());
 
             //The MainWindow's DataContext is the current MainWindow instance itself
             DataContext = this;
@@ -56,8 +57,8 @@ namespace ProcessDemo.WPF
 
         private void btnDeleteAllTrees_Click(object sender, RoutedEventArgs e)
         {
-            AppleTreeHelper.DeleteAppleTreeAll();
-            AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
+            appleTreeHelper.DeleteAppleTreeAll();
+            AppleTrees = new ObservableCollection<AppleTree>(appleTreeHelper.GetAppleTreeAll());
         }
 
         #region Change theme
@@ -85,8 +86,8 @@ namespace ProcessDemo.WPF
             {
 
                 var appletree = (AppleTree)((Button)sender).DataContext;
-                AppleTreeHelper.DeleteAppleTreeById(appletree.Id);
-                AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
+                appleTreeHelper.DeleteAppleTreeById(appletree.Id);
+                AppleTrees = new ObservableCollection<AppleTree>(appleTreeHelper.GetAppleTreeAll());
                 MessageBox.Show($"Tree with Id {appletree.Id} deleted");
             }
             catch(System.InvalidCastException)
@@ -99,17 +100,17 @@ namespace ProcessDemo.WPF
         private void dgData_RowEditEnding(object sender, System.Windows.Controls.DataGridRowEditEndingEventArgs e)
         {
             var appletree = (AppleTree)((DataGrid)sender).SelectedValue;
-            if(AppleTreeHelper.GetAppleTreeAll().Where(c=>c.Id==appletree.Id).Any())
+            if(appleTreeHelper.GetAppleTreeAll().Where(c=>c.Id==appletree.Id).Any())
             {
-                AppleTreeHelper.UpdateTree(appletree);
+                appleTreeHelper.UpdateTree(appletree);
                 MessageBox.Show($"Updated tree with Id {appletree.Id}");
             }
             else
             {
-                AppleTreeHelper.CreateAppleTree(appletree);
+                appleTreeHelper.CreateAppleTree(appletree);
                 MessageBox.Show($"New tree created");
             }
-            AppleTrees = new ObservableCollection<AppleTree>(AppleTreeHelper.GetAppleTreeAll());
+            AppleTrees = new ObservableCollection<AppleTree>(appleTreeHelper.GetAppleTreeAll());
 
         }
     }
