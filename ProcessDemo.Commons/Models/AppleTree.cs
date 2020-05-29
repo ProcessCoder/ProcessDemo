@@ -1,6 +1,8 @@
 ﻿using ProcessDemo.Commons.Enums;
+using ProcessDemo.Commons.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace ProcessDemo.Commons
@@ -14,9 +16,24 @@ namespace ProcessDemo.Commons
         [Key]
         public int Id { get; set; }
 
-        public double AppleYield { get =>appleYield; set => RaisePropertyChange(ref appleYield,value); }
-        public double WaterConsumption { get => waterConsumption; set => RaisePropertyChange(ref waterConsumption, value); }
-        public Fertilizer FertilizingAgent { get => fertilizingAgent; set => RaisePropertyChange(ref fertilizingAgent,value); }
+        public double AppleYield 
+        { 
+            get =>appleYield; 
+            set => RaisePropertyChange(ref appleYield,value); 
+        }
+        public double WaterConsumption 
+        { 
+            get => waterConsumption; 
+            set => RaisePropertyChange(ref waterConsumption, value); 
+        }
+        public Fertilizer FertilizingAgent 
+        { 
+            get => fertilizingAgent; 
+            set => RaisePropertyChange(ref fertilizingAgent,value); 
+        }
+
+        public int FarmId { get; set; }
+        public Farm Farm { get; set; }
 
         public AppleTree()
         {

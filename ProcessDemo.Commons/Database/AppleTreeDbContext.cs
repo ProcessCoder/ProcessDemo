@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProcessDemo.Commons.Models;
 
 namespace ProcessDemo.Commons.Database
 {
@@ -23,15 +24,19 @@ namespace ProcessDemo.Commons.Database
                 {
                     optionsBuilder.UseSqlServer(connectionString);
                 }
-                
             }
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
-
+                    modelBuilder.Entity<AppleTree>()
+                        .HasOne<Farm>(tree => tree.Farm)
+                        .WithMany(f => f.AppleTrees)
+                        .HasForeignKey(f => f.FarmId);
             }
 
             //Our database will have one table called AppleTrees
-            public virtual DbSet<AppleTree> AppleTrees { get; set; }
+            public DbSet<AppleTree> AppleTrees { get; set; }
+
+            public DbSet<Farm> Farms { get; set; }
     }
 }

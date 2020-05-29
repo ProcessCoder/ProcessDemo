@@ -1,4 +1,5 @@
-﻿using ProcessDemo.Commons.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using ProcessDemo.Commons.Database;
 using ProcessDemo.Commons.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,28 +16,20 @@ namespace ProcessDemo.Commons.Helper
             db = context;
         }
 
-        /// <summary>
-        /// Returns a single AppleTree by Id
-        /// </summary>
-        /// <returns></returns>
         public AppleTree GetAppleTreeById(int id)
         {
-           return db.AppleTrees.SingleOrDefault(f => f.Id == id);
+           return db.AppleTrees
+                .Include(b=>b.Farm)
+                .SingleOrDefault(f => f.Id == id);
         }
 
-        /// <summary>
-        /// Returns all AppleTrees as a List
-        /// </summary>
-        /// <returns></returns>
         public IList<AppleTree> GetAppleTreeAll()
         {
-            return db.AppleTrees.ToList();
+            return db.AppleTrees
+                .Include(b => b.Farm)
+                .ToList();
         }
 
-        /// <summary>
-        /// Creates a new Apple Tree from its properties
-        /// </summary>
-        /// <returns></returns>
         public AppleTree CreateAppleTree(double appleYield, double waterConsumption, Fertilizer fertilizingAgent)
         {
                 var f = new AppleTree();
@@ -53,10 +46,6 @@ namespace ProcessDemo.Commons.Helper
                 return f;
         }
 
-        /// <summary>
-        /// Creates a new Apple Tree from an object
-        /// </summary>
-        /// <returns></returns>
         public AppleTree CreateAppleTree(AppleTree f)
         {
                 //Save
@@ -66,10 +55,6 @@ namespace ProcessDemo.Commons.Helper
                 return f;
         }
 
-        /// <summary>
-        /// Deletes all Apple Trees from the database
-        /// </summary>
-        /// <returns></returns>
         public IList<AppleTree> DeleteAppleTreeAll()
         {
                 var query = from p in db.AppleTrees
@@ -82,10 +67,6 @@ namespace ProcessDemo.Commons.Helper
         }
 
 
-        /// <summary>
-        /// Deletes a tree by Id
-        /// </summary>
-        /// <returns></returns>
         public void DeleteAppleTreeById(int id)
         {
             var apples = db.AppleTrees.Where(c => c.Id == id);
@@ -93,10 +74,6 @@ namespace ProcessDemo.Commons.Helper
             db.SaveChanges();
         }
 
-        /// <summary>
-        /// Updates a tree
-        /// </summary>
-        /// <returns></returns>
         public void UpdateTree(AppleTree appletree)
         {
             var tree = db.AppleTrees.FirstOrDefault(c => c.Id == appletree.Id);

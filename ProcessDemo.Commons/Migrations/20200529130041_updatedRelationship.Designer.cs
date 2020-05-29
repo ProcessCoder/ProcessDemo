@@ -9,14 +9,14 @@ using ProcessDemo.Commons.Database;
 namespace ProcessDemo.Commons.Migrations
 {
     [DbContext(typeof(AppleTreeDbContext))]
-    [Migration("20200502190406_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200529130041_updatedRelationship")]
+    partial class updatedRelationship
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -30,6 +30,9 @@ namespace ProcessDemo.Commons.Migrations
                     b.Property<double>("AppleYield")
                         .HasColumnType("float");
 
+                    b.Property<int>("FarmId")
+                        .HasColumnType("int");
+
                     b.Property<int>("FertilizingAgent")
                         .HasColumnType("int");
 
@@ -38,7 +41,33 @@ namespace ProcessDemo.Commons.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FarmId");
+
                     b.ToTable("AppleTrees");
+                });
+
+            modelBuilder.Entity("ProcessDemo.Commons.Models.Farm", b =>
+                {
+                    b.Property<int>("FarmId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FarmId");
+
+                    b.ToTable("Farms");
+                });
+
+            modelBuilder.Entity("ProcessDemo.Commons.AppleTree", b =>
+                {
+                    b.HasOne("ProcessDemo.Commons.Models.Farm", "Farm")
+                        .WithMany("AppleTrees")
+                        .HasForeignKey("FarmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

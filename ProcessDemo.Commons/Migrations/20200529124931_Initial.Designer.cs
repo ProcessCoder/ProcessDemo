@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProcessDemo.Commons.Database;
 
 namespace ProcessDemo.Commons.Migrations
 {
     [DbContext(typeof(AppleTreeDbContext))]
-    partial class AppleTreeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200529124931_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,7 +22,7 @@ namespace ProcessDemo.Commons.Migrations
 
             modelBuilder.Entity("ProcessDemo.Commons.AppleTree", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AppleTreeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -37,7 +39,7 @@ namespace ProcessDemo.Commons.Migrations
                     b.Property<double>("WaterConsumption")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.HasKey("AppleTreeId");
 
                     b.HasIndex("FarmId");
 

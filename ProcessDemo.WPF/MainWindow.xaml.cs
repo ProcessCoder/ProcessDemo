@@ -2,6 +2,7 @@
 using ProcessDemo.Commons;
 using ProcessDemo.Commons.Database;
 using ProcessDemo.Commons.Helper;
+using ProcessDemo.Commons.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,9 +13,7 @@ using System.Windows.Media;
 
 namespace ProcessDemo.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window , INotifyPropertyChanged
     {
         #region PropertyChanged
@@ -26,22 +25,33 @@ namespace ProcessDemo.WPF
         }
         #endregion
 
-        //Changed List to ObservableCollection because it implements the ICollectionChanged Interface
         private ObservableCollection<AppleTree> appleTrees;
         public ObservableCollection<AppleTree> AppleTrees 
         { 
             get => appleTrees; 
             set => RaisePropertyChange(ref appleTrees,value); 
         }
+
         public AppleTreeHelper appleTreeHelper = new AppleTreeHelper(new AppleTreeDbContext());
+
+        private ObservableCollection<Farm> farms;
+        public ObservableCollection<Farm> Farms
+        {
+            get => farms;
+            set => RaisePropertyChange(ref farms, value);
+        }
+
+        public FarmHelper farmHelper = new FarmHelper(new AppleTreeDbContext());
 
         public MainWindow()
         {
-            
             InitializeComponent();
             
             //We query all Apple Trees from the database on StartUp
             AppleTrees = new ObservableCollection<AppleTree>(appleTreeHelper.GetAppleTreeAll());
+
+            AppleTreeDbInitializer.InitialiseFarms();
+            Farms = new ObservableCollection<Farm>(farmHelper.GetFarmAll());
 
             //The MainWindow's DataContext is the current MainWindow instance itself
             DataContext = this;
@@ -100,7 +110,7 @@ namespace ProcessDemo.WPF
         private void dgData_RowEditEnding(object sender, System.Windows.Controls.DataGridRowEditEndingEventArgs e)
         {
             var appletree = (AppleTree)((DataGrid)sender).SelectedValue;
-            if(appleTreeHelper.GetAppleTreeAll().Where(c=>c.Id==appletree.Id).Any())
+            if(appleTreeHelper.GetAppleTreeAll().Where(c=>c.Id == appletree.Id).Any())
             {
                 appleTreeHelper.UpdateTree(appletree);
                 MessageBox.Show($"Updated tree with Id {appletree.Id}");

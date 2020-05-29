@@ -1,7 +1,10 @@
-﻿using ProcessDemo.Commons.Enums;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using ProcessDemo.Commons.Enums;
 using ProcessDemo.Commons.Helper;
+using ProcessDemo.Commons.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ProcessDemo.Commons.Database
@@ -11,8 +14,8 @@ namespace ProcessDemo.Commons.Database
         public static List<AppleTree> InitialiseTrees()
         {
             AppleTreeHelper appleTreeHelper = new AppleTreeHelper(new AppleTreeDbContext());
-        //Initalise return value
-        List<AppleTree> result = new List<AppleTree>();
+            //Initalise return value
+            List<AppleTree> result = new List<AppleTree>();
 
             //Random number generator
             Random random = new Random();
@@ -28,12 +31,47 @@ namespace ProcessDemo.Commons.Database
                     FertilizingAgent = (Fertilizer)random.Next(Enum.GetNames(typeof(Fertilizer)).Length)
                 };
 
-                appleTreeHelper.CreateAppleTree(tree);
                 result.Add(tree);
             }
 
             //return the List
             return result;
         }
+
+       public static List<Farm> InitialiseFarms()
+       {
+            AppleTreeDbContext con = new AppleTreeDbContext();
+
+            if(con.Farms.Count()==0)
+            {
+                FarmHelper helper = new FarmHelper(con);
+
+                List<Farm> farms = new List<Farm>
+                {
+                    new Farm
+                    {
+                        Name="First Farm",
+                        AppleTrees= InitialiseTrees()
+                    },
+                    new Farm
+                    {
+                        Name="Second Farm",
+                        AppleTrees= InitialiseTrees()
+                    },
+                    new Farm
+                    {
+                        Name="Third Farm",
+                        AppleTrees= InitialiseTrees()
+                    }
+                };
+
+                foreach (Farm farm in farms)
+                {
+                    helper.CreateFarm(farm);
+                }
+                return farms;
+            }
+            return null;
+       }
     }
 }

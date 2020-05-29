@@ -22,11 +22,14 @@ namespace ProcessDemo.Tests
             //Instantiate a new DbContext with the in memory database
             var InMemoryContext = new AppleTreeDbContext(options);
 
+            //Create an instance of AppleTreeHelper and pass the in memory context as a parameter
+            AppleTreeHelper appleTreeHelper = new AppleTreeHelper(InMemoryContext);
+            appleTreeHelper.DeleteAppleTreeAll();
+
             //Check if the database is empty
             Assert.AreEqual(InMemoryContext.AppleTrees.Count(), 0);
 
-            //Create an instance of AppleTreeHelper and pass the in memory context as a parameter
-            AppleTreeHelper appleTreeHelper = new AppleTreeHelper(InMemoryContext);
+            
 
             //Create an in memory apple tree
             var appletree = appleTreeHelper.CreateAppleTree(100, 110, Fertilizer.Medium);
@@ -40,6 +43,37 @@ namespace ProcessDemo.Tests
             Assert.AreEqual(Fertilizer.Medium, InMemoryContext.AppleTrees.FirstOrDefault().FertilizingAgent);
 
 
+        }
+
+        [TestMethod]
+        public void CreateAppleTreeTestsWithObjectAsParameter()
+        {
+            //Instantiate a new DbContext with the in memory database
+            var InMemoryContext = new AppleTreeDbContext(options);
+
+            //Create an instance of AppleTreeHelper and pass the in memory context as a parameter
+            AppleTreeHelper appleTreeHelper = new AppleTreeHelper(InMemoryContext);
+            appleTreeHelper.DeleteAppleTreeAll();
+
+            //Check if the database is empty
+            Assert.AreEqual(InMemoryContext.AppleTrees.Count(), 0);
+
+            //Create an in memory tree
+            var tree = new AppleTree
+            {
+                AppleYield = 200,
+                WaterConsumption = 220, 
+                FertilizingAgent = Fertilizer.Strong
+            };
+            appleTreeHelper.CreateAppleTree(tree);
+
+            //Check if tree was inserted
+            Assert.AreEqual(InMemoryContext.AppleTrees.Count(), 1);
+
+            //Check the inserted tree's properties
+            Assert.AreEqual(200, InMemoryContext.AppleTrees.FirstOrDefault().AppleYield);
+            Assert.AreEqual(220, InMemoryContext.AppleTrees.FirstOrDefault().WaterConsumption);
+            Assert.AreEqual(Fertilizer.Strong, InMemoryContext.AppleTrees.FirstOrDefault().FertilizingAgent);
         }
 
         [TestMethod]
