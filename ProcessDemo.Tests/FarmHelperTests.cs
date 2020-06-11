@@ -5,6 +5,7 @@ using ProcessDemo.Commons.Helper;
 using ProcessDemo.Commons.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -18,8 +19,9 @@ namespace ProcessDemo.Tests
             .UseInMemoryDatabase(databaseName: "TestDatabase")
             .Options;
 
+       
         [TestMethod]
-        public void CreateFarmTests()
+        public void CreateFarmAndGetFarmAllTests()
         {
             //Instantiate a new DbContext with the in memory database
             var InMemoryContext = new AppleTreeDbContext(options);
@@ -31,8 +33,6 @@ namespace ProcessDemo.Tests
             //Check if the database is empty
             Assert.AreEqual(InMemoryContext.Farms.Count(), 0);
 
-            
-
             //Create an in memory farm
             var farm = farmHelper.CreateFarm("Testfarm",AppleTreeDbInitializer.InitialiseTrees());
 
@@ -42,6 +42,9 @@ namespace ProcessDemo.Tests
             //Check the inserted farm's properties
             Assert.AreEqual("Testfarm", InMemoryContext.Farms.FirstOrDefault().Name);
             Assert.AreEqual(10, InMemoryContext.Farms.FirstOrDefault().AppleTrees.Count);
+
+            ObservableCollection<Farm> farms = new ObservableCollection<Farm>(farmHelper.GetFarmAll());
+            Assert.AreEqual(farms.FirstOrDefault().AppleTrees.Count, 10);
         }
 
         [TestMethod]

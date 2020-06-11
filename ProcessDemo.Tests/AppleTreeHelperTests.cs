@@ -4,6 +4,7 @@ using ProcessDemo.Commons;
 using ProcessDemo.Commons.Database;
 using ProcessDemo.Commons.Enums;
 using ProcessDemo.Commons.Helper;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace ProcessDemo.Tests
@@ -17,7 +18,7 @@ namespace ProcessDemo.Tests
             .Options;
 
         [TestMethod]
-        public void CreateAppleTreeTests()
+        public void CreateAppleTreeAndGetAppleTreeAllTests()
         {
             //Instantiate a new DbContext with the in memory database
             var InMemoryContext = new AppleTreeDbContext(options);

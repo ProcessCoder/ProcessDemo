@@ -13,7 +13,6 @@ namespace ProcessDemo.Commons.Database
     {
         public static List<AppleTree> InitialiseTrees()
         {
-            AppleTreeHelper appleTreeHelper = new AppleTreeHelper(new AppleTreeDbContext());
             //Initalise return value
             List<AppleTree> result = new List<AppleTree>();
 
@@ -67,7 +66,10 @@ namespace ProcessDemo.Commons.Database
 
                 foreach (Farm farm in farms)
                 {
-                    helper.CreateFarm(farm);
+                    if(!con.Farms.Where(c=>c.Name==farm.Name).Any())
+                    {
+                        helper.CreateFarm(farm);
+                    }
                 }
                 return farms;
             }

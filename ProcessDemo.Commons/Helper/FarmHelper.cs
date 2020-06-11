@@ -4,6 +4,7 @@ using ProcessDemo.Commons.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace ProcessDemo.Commons.Helper
@@ -80,6 +81,14 @@ namespace ProcessDemo.Commons.Helper
             farm.Name = updatedFarm.Name;
             farm.AppleTrees = updatedFarm.AppleTrees;
             db.SaveChanges();
+        }
+
+        public IList<Farm> FindFarms(Expression<Func<Farm, bool>> predicate)
+        {
+            return db.Farms
+                 .Include(c=>c.AppleTrees)
+                            .Where(predicate)
+                            .ToList();
         }
     }
 }

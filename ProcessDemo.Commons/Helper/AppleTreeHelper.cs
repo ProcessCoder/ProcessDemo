@@ -4,6 +4,7 @@ using ProcessDemo.Commons.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace ProcessDemo.Commons.Helper
 {
@@ -81,6 +82,14 @@ namespace ProcessDemo.Commons.Helper
             tree.FertilizingAgent = appletree.FertilizingAgent;
             tree.WaterConsumption = appletree.WaterConsumption;
             db.SaveChanges();
+        }
+
+        public IList<AppleTree> FindTrees(Expression<Func<AppleTree, bool>> predicate)
+        {
+            return db.AppleTrees
+                 .Include(c => c.Farm)
+                            .Where(predicate)
+                            .ToList();
         }
     }
 }
